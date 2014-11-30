@@ -1,0 +1,87 @@
+{% macro siteHead() -%}
+    <head>
+        <title>Just a Exercise DB</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Rambla:700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='thirdparty/default.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='thirdparty/default.date.css') }}">
+        <script src="{{ url_for('static', filename='thirdparty/picker.js') }}"></script>
+        <script src="{{ url_for('static', filename='thirdparty/picker.date.js') }}"></script>
+        <script>
+            $(function() {
+                $( "input[type='text'].input-datepicker").pickadate({
+                    formatSubmit: 'yyyy-mm-dd',
+                    hiddenName: true
+                })
+            });
+        </script>
+    </head>
+{% endmacro %}
+
+{% macro flashes() -%}
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=['success']) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=['info']) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=['warning']) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-warning" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=['error']) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endmacro %}
+
+
+{% macro form_errors(form) -%}
+    {% for field_name, field_errors in form.errors.iteritems() %}
+        {% for error in field_errors %}
+            <div class="alert alert-danger" role="alert">{{ form[field_name].label }}: {{ error }}</div>
+        {% endfor %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro logged_exercise_widget(form) -%}
+    <div class="col-md-6">
+        <div class="panel panel-default logged_item">
+            <div class="panel-heading">{{ form.logged_exercise_name.data }}</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    {{ form.logged_exercise_id.label }}:
+                    {{ form.logged_exercise_id(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.sets.label }}:
+                    {{ form.sets(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.reps.label }}:
+                    {{ form.reps(class="form-control") }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

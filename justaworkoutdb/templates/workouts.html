@@ -1,0 +1,37 @@
+{% import 'widgets.html' as widgets %}
+
+{% extends "layout.html" %}
+{% set active_page = 'workouts' -%}
+
+
+{% block pagecontent %}
+
+<div class="page-title">
+    <h1>View workouts</h1>
+    <p>Here is a list of the workout sessions you have logged.</p>
+    <hr>
+</div>
+
+<div cass="exercise-list-header">
+    <div class="exercise-controls">
+        <a class="exercise-add" href="{{ url_for('add_workout') }}">add</a> / <a class="exercise-add">remove</a>
+    </div>
+    <div class="clearfix"></div>
+ </div>
+
+{{ widgets.flashes() }}
+<div class="workout-list">
+    <ul>
+    {% for workout in workouts %}
+        <li class="panel panel-default">
+            <div class="panel-heading">Workout Session on {{ workout.datetime|datetime }}</div>
+            <div class="panel-body">
+            {% for logged_exercise in workout.logged_exercises %}
+                <span class="label label-default">{{ logged_exercise.exercise.name }}</span>
+            {% endfor %}
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

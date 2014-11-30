@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block pagetitle %}
+<h1>Just a DB</h1>
+
+{% for entry in entries %}
+<p>{{ loop.index }}. {{ entry.exercise|safe }} (Sets: {{ entry.sets }}, Reps: {{ entry.reps }})</p>
+{% endfor %}
+
+{% endblock %}

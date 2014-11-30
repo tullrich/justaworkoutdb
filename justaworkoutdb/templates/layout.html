@@ -1,0 +1,46 @@
+{% import 'widgets.html' as widgets %}
+
+{% set navigation_bar = [
+    (url_for('workouts'), 'workouts', 'Workouts'),
+    (url_for('exercises'), 'exercises', 'Exercises'),
+] -%}
+{% set active_page = active_page|default('home') -%}
+
+<!doctype html>
+<html lang="en">
+    {{ widgets.siteHead() }}
+    <body>
+      <div id="header">
+         <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <ul>
+                    <li class="home-btn{% if id == 'home' %} active{% endif%}">
+                        <a class="subtle" href="{{ url_for('home') }}">
+                            <i class="fa fa-child"></i><span>ExerciseDB</span>
+                        </a>
+                    </li>
+                    {% for href, id, caption in navigation_bar %}
+                        <li{% if id == active_page %} class="active"{% endif%}>
+                            <a class="subtle" href="{{ href|e }}">{{ caption|e }}</a>
+                        </li>
+                    {% endfor %}
+                        <li class="usr-info pull-right">
+                            <img height="24" width="24" src="{{ g.user.twitter_profile_img }}"/>
+                            <span>@{{ g.user.twitter_name }}, </span>
+                            <a class="subtle" href="{{ url_for('logout') }}"><span class="logout-txt">Logout?</span></a>
+                        </li>
+                    </ul>
+                 </div>
+              </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row" id="page-content">
+              <div class="col-md-10 col-md-offset-1">
+                {% block pagecontent %}{% endblock %}
+              </div>
+          </div>
+      </div>
+    </body>
+</html>

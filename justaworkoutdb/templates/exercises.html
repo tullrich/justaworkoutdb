@@ -1,0 +1,37 @@
+{% import 'widgets.html' as widgets %}
+
+{% extends "layout.html" %}
+{% set active_page = 'exercises' -%}
+
+
+{% block pagecontent %}
+
+<div class="page-title">
+    <h1>View exercises available to log</h1>
+    <p>You may also add new exercises to the database, or remove an existing one.
+        Keep in mind these are shared by all users.</p>
+    <hr>
+</div>
+{{ widgets.flashes() }}
+<div cass="exercise-list-header">
+    <div class="exercise-controls">
+        <a class="exercise-add" href="{{ url_for('add_exercise') }}">add</a> / <a class="exercise-add">remove</a>
+    </div>
+    <div class="clearfix"></div>
+ </div>
+
+<div class="exercise-list">
+    <ul>
+    {% for exercise in exercises %}
+        <li>
+            <!--<div class="exercise-image"><img src="{{ exercise.img }}"></div>-->
+            <div class="exercise-content">
+                <span class="exercise-name"><i class="fa fa-area-chart"></i> <a>{{ exercise.name }}</a></span>
+                <span class="exercise-description">{{ exercise.description }}</span>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
