@@ -27,7 +27,7 @@
                     {% endfor %}
                         <li class="usr-info pull-right">
                             <img height="24" width="24" src="{{ g.user.twitter_profile_img }}"/>
-                            <span>@{{ g.user.twitter_name }}, </span>
+                            <span class="usr-name">@{{ g.user.twitter_name }}, </span>
                             <a class="subtle" href="{{ url_for('logout') }}"><span class="logout-txt">Logout?</span></a>
                         </li>
                     </ul>

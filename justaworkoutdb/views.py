@@ -1,4 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 from utility import requires_login, init_db, connect_db, get_db
 from justaworkoutdb import app, twitter, db
 from .forms import AddExerciseForm, AddWorkoutSessionForm
@@ -7,31 +7,70 @@ from .models import Exercise, WorkoutSession, User, LoggedExercise
 @app.route('/')
 @requires_login
 def home():
-    db = get_db()
-    cur = db.execute('select name, description from exercises order by id asc')
-    entries = cur.fetchall()
-    return render_template('home.html', entries=entries)
+    return redirect(url_for('workouts'))
 
 
 @app.route('/workouts')
 @requires_login
 def workouts():
-    workouts = WorkoutSession.query.filter_by(owner_id=g.user.id).all()
+    workouts = WorkoutSession.query.filter_by(owner_id=g.user.id).order_by(WorkoutSession.datetime.desc())
     return render_template('workouts.html', workouts=workouts)
 
+@app.route('/workouts/<id>/edit', methods=['GET', 'POST'])
+@requires_login
+def edit_workout( id ):
+    workout_session = WorkoutSession.query.filter_by(id=id).first()
+
+    if workout_session is None:
+        # If this was a submission throw up an error.
+        if request.method == 'POST':
+            flash('Unable to modify workout! Maybe it no longer exists?', category='error')
+        return redirect(url_for('workouts'))
+
+    # Edit submission.
+    if request.method == 'POST':
+        # on POST we fill with the form data.
+        form = AddWorkoutSessionForm()
+        if form.validate_on_submit():
+
+            # Delete the existing workout_session
+            db.session.delete(workout_session)
+            db.session.commit()
+
+            # Add the new one
+            workout = WorkoutSession(g.user.id, form.datetime.data)
+
+            for form_log_item in form.logged_exercises.entries:
+                logged_item = LoggedExercise(form_log_item.exercise.data.id
+                                             , form_log_item.sets.data
+                                             , form_log_item.reps.data)
+                workout.logged_exercises.append(logged_item)
+
+            db.session.add(workout)
+            db.session.commit()
+
+            flash('Workout modified!', category='success')
+            return redirect(url_for('workouts'))
+    else:
+        # on GET use the queried Model.
+        form = AddWorkoutSessionForm(formdata=None, obj=workout_session)
+
+    exercises = Exercise.query.all()
+    return render_template('workouts_add.html', form=form, exercises=exercises, isEdit=True, workout=workout_session)
 
 @app.route('/workouts/add', methods=['GET', 'POST'])
 @requires_login
 def add_workout():
     form = AddWorkoutSessionForm()
-    form.logged_exercises[0].logged_exercise_id.choices = [(e.id, e.name) for e in Exercise.query.order_by('name')]
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            workout = WorkoutSession(g.user.id, form.date_logged.data)
+            workout = WorkoutSession(g.user.id, form.datetime.data)
 
             for form_log_item in form.logged_exercises.entries:
-                logged_item = LoggedExercise(form_log_item.logged_exercise_id.data)
+                logged_item = LoggedExercise(form_log_item.exercise.data.id
+                                             , form_log_item.sets.data
+                                             , form_log_item.reps.data)
                 workout.logged_exercises.append(logged_item)
 
             db.session.add(workout)
@@ -43,6 +82,20 @@ def add_workout():
     exercises = Exercise.query.all()
     return render_template('workouts_add.html', form=form, exercises=exercises)
 
+@app.route('/workouts/remove', methods=['POST'])
+@requires_login
+def remove_workout():
+    workout_id = request.form['id']
+    response = jsonify(id=workout_id)
+
+    workout_session = WorkoutSession.query.filter_by(id=workout_id, owner_id=g.user.id).first()
+    if workout_session:
+        db.session.delete(workout_session)
+        db.session.commit()
+    else:
+        response.status_code = 500
+
+    return response
 
 @app.route('/exercises')
 @requires_login
@@ -59,7 +112,7 @@ def add_exercise():
     if request.method == 'POST':
         if form.validate_on_submit():
 
-            exercise = Exercise(form.name.data, form.description.data, form.img.data)
+            exercise = Exercise(form.name.data, form.description.data)
             db.session.add(exercise)
             db.session.commit()
 

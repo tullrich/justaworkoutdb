@@ -6,13 +6,11 @@ class Exercise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
     description = db.Column(db.String(512))
-    img = db.Column(db.String(256))
 
 
-    def __init__(self, name, description, img):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.img = img
 
 
 class LoggedExercise(db.Model):
@@ -20,16 +18,20 @@ class LoggedExercise(db.Model):
     workout_session = db.Column(db.Integer, db.ForeignKey('workout_session.id'))
     exercise_id = db.Column(db.Integer, db.ForeignKey('exercise.id'))
     exercise = db.relationship("Exercise", uselist=False)
+    sets = db.Column(db.Integer)
+    reps = db.Column(db.Integer)
 
-    def __init__(self, exercise_id):
+    def __init__(self, exercise_id, sets, reps):
         self.exercise_id = exercise_id
+        self.sets = sets
+        self.reps = reps
 
 class WorkoutSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     owner = db.relationship("User", uselist=False)
-    logged_exercises = db.relationship("LoggedExercise", backref=db.backref("session", uselist=False))
+    logged_exercises = db.relationship("LoggedExercise", backref=db.backref("session", uselist=False), cascade="all, delete-orphan")
 
 
     def __init__(self, owner_id, log_time):

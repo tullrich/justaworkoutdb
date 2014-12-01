@@ -7,7 +7,11 @@
 {% block pagecontent %}
 
 <div class="page-title">
-    <h1>Add a Workout Session</h1>
+    <h1>{% if isEdit %}
+        Edit Workout Session
+    {% else %}
+        Add New Workout Session
+    {% endif %}</h1>
     <p></p>
     <hr>
 </div>
@@ -15,58 +19,60 @@
 {{ widgets.form_errors(form) }}
 
 <div class="row">
-    <div class="col-md-2">
-        <div class="btn-group-vertical" role="group">
-            {% for exercise in exercises %}
-            <button type="button" class="btn btn-default">{{ exercise.name }}</button>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="col-md-10">
+    <div class="col-md-12">
         <form class="form add-exercise" method="post">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                {{ form.date_logged.label }}:
-                {{ form.date_logged(class="form-control input-datepicker", **{'data-value':form.date_logged.data}) }}
-            </div>
-
-            <div class="add_log_item">
-                <div class="panel panel-default logged_item">
-                    <div class="panel-heading">Add a Logged Item</div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label>Exercise</label>
-                            <select class="form-control">
-                                <option value="2">Dumbell Deadlift</option>
-                                <option value="1">Test Exercise</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Sets</label>
-                            <input class="form-control" type="text" value="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Reps</label>
-                            <input class="form-control" type="text" value="1">
-                        </div>
-                    </div>
-                </div>
+                {{ form.datetime.label }}:
+                {{ form.datetime(class="form-control input-datepicker", **{'data-value':form.datetime.data|default("", True)}) }}
             </div>
 
             <div class="logged_items row">
                 {{ form.logged_exercises() }}
-                <div class="col-md-6">
-                    <div class="panel panel-default logged_item">
-                        <div class="panel-heading">Add Exercise</div>
-                        <div class="panel-body">
-                            Add
-                        </div>
-                    </div>
-                </div>
             </div>
 
+            <div class="form-group">
+                <label>Add Exercise</label>
+                <select class="form-control" id="add-log-item">
+                    <option selected disabled hidden value=''></option>"
+                    {% for exercise in exercises %}
+                    <option value="{{ exercise.id }}">{{ exercise.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if isEdit %}
+            <button type="submit" class="btn btn-default">Apply</button>
+            <a href="{{ url_for('edit_workout', id=workout.id) }}" class="btn btn-default">Reset</a>
+            {% else %}
             <button type="submit" class="btn btn-default">Create Session</button>
+            {% endif %}
         </form>
     </div>
 </div>
+
+{% raw %}
+ <script id="entry-template" type="text/x-handlebars-template">
+ <li>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ exerciseName }}
+                <a class="pull-right erase-logged_item" href="javascript:void(0);"><i class="fa fa-close"></i></a>
+            </div>
+            <div class="panel-body">
+                <input id="logged_exercises-{{ itemId }}-exercise" name="logged_exercises-{{ itemId }}-exercise" type="hidden" value="{{ exerciseId }}">
+                <div class="form-group">
+                    <label for="logged_exercises-{{ itemId }}-sets">Sets</label>:
+                    <input class="form-control" id="logged_exercises-{{ exerciseId }}-sets" name="logged_exercises-{{ itemId }}-sets" type="text" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="logged_exercises-{{ itemId }}-reps">Reps</label>:
+                    <input class="form-control" id="logged_exercises-{{ itemId }}-reps" name="logged_exercises-{{ itemId }}-reps" type="text" value="1">
+                </div>
+            </div>
+        </div>
+    </div>
+ </li>
+</script>
+{% endraw %}
 {% endblock %}

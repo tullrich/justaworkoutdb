@@ -169,7 +169,7 @@ hr {
 
 
 @media (max-width: 767px) {
-  .usr-info span {
+  .usr-info .usr-name {
     display: none;
   }
 }
@@ -333,16 +333,19 @@ hr {
 }
 
 form.add-exercise {
-
-  .logged_items {
-  }
-
-  .logged_item {
-  }
 }
 
 .workout-list {
-  li {
+  .workout {
     margin-bottom: 20px;
+
+    .edit-workout {
+      margin-right: 10px;
+    }
+
+    .erase-workout {
+      top: -1px;
+      position: relative;
+    }
   }
 }

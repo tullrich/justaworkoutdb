@@ -4,6 +4,7 @@ from contextlib import closing
 from justaworkoutdb import app
 from sqlite3 import dbapi2 as sqlite3
 from .models import User
+from wtforms import FormField, FieldList
 
 def requires_login(f):
     @wraps(f)
@@ -40,3 +41,20 @@ def get_db():
 @app.template_filter(name='datetime')
 def format_datetime(value):
     return value.strftime('%Y-%m-%d')
+
+
+@app.template_test(name='formfield')
+def formfield_test(instance):
+    return isinstance(instance, FormField)
+
+
+@app.template_test(name='fieldlist')
+def fieldlist_test(instance):
+    return isinstance(instance, FieldList)
+
+'''
+        {% elif form[field_name] is fieldlist and error is mapping %}
+            {{ form_errors_rec(form[field_name][0], error.iteritems()) }}
+        {% elif form[field_name] is formfield and error is mapping %}
+            {{ form_errors_rec(form[field_name].form, error.iteritems()) }}
+'''

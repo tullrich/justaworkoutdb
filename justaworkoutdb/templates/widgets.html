@@ -11,16 +11,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='thirdparty/default.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='thirdparty/default.date.css') }}">
+        <script src="{{ url_for('static', filename='thirdparty/handlebars-v2.0.0.js') }}"></script>
         <script src="{{ url_for('static', filename='thirdparty/picker.js') }}"></script>
         <script src="{{ url_for('static', filename='thirdparty/picker.date.js') }}"></script>
-        <script>
-            $(function() {
-                $( "input[type='text'].input-datepicker").pickadate({
-                    formatSubmit: 'yyyy-mm-dd',
-                    hiddenName: true
-                })
-            });
-        </script>
+        <script src="{{ url_for('static', filename='justaworkoutdb.js') }}"></script>
     </head>
 {% endmacro %}
 
@@ -55,24 +49,29 @@
     {% endwith %}
 {% endmacro %}
 
-
-{% macro form_errors(form) -%}
-    {% for field_name, field_errors in form.errors.iteritems() %}
+{% macro form_errors_rec(form, errors) %}
+    {% for field_name, field_errors in errors %}
         {% for error in field_errors %}
-            <div class="alert alert-danger" role="alert">{{ form[field_name].label }}: {{ error }}</div>
+            {% if error is string %}
+                <div class="alert alert-danger" role="alert">{{ form[field_name].label }}: {{ error }}</div>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 {% endmacro %}
 
+{% macro form_errors(form) -%}
+    {{ form_errors_rec(form, form.errors.iteritems()) }}
+{% endmacro %}
+
 {% macro logged_exercise_widget(form) -%}
-    <div class="col-md-6">
-        <div class="panel panel-default logged_item">
-            <div class="panel-heading">{{ form.logged_exercise_name.data }}</div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ form.exercise.data.name }}
+                <a class="pull-right erase-logged_item" href="javascript:void(0);"><i class="fa fa-close"></i></a>
+            </div>
             <div class="panel-body">
-                <div class="form-group">
-                    {{ form.logged_exercise_id.label }}:
-                    {{ form.logged_exercise_id(class="form-control") }}
-                </div>
+                {{ form_errors(form) }}
+                {{ form.exercise() }}
                 <div class="form-group">
                     {{ form.sets.label }}:
                     {{ form.sets(class="form-control") }}
