@@ -23,9 +23,13 @@
 <div class="exercise-list">
     <ul>
     {% for exercise in exercises %}
-        <li>
+        <li class="exercise">
             <!--<div class="exercise-image"><img src="{{ exercise.img }}"></div>-->
             <div class="exercise-content">
+                <div class="pull-right">
+                    <a class="edit-exercise" href="{{ url_for('edit_exercise', id=exercise.id) }}"><i class="fa fa-edit"></i></a>
+                    <a class="erase-exercise" href="javascript:void(0);" data-exercise-id="{{ exercise.id }}"><i class="fa fa-close"></i></a>
+                </div>
                 <span class="exercise-name"><i class="fa fa-area-chart"></i> <a>{{ exercise.name }}</a></span>
                 <span class="exercise-description">{{ exercise.description }}</span>
             </div>

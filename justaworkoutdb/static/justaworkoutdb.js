@@ -6,25 +6,29 @@ $(function() {
         editable: true
     });
 
-    // Remove workout session ajax.
-    $(".erase-workout").click(function( e ){
-        var ele = $(this);
-        var workoutId = ele.data('workout-id');
-        if(!workoutId || ele.data("jqxhr"))
+    function EraseDelegate(key, route, selector) {
+        return function(e) {
+            var ele = $(this);
+            var itemId = ele.data(key);
+            if(!itemId || ele.data("jqxhr"))
+                return false;
+            ele.html("<i class=\"fa fa-spin fa-spinner\"></i");
+            ele.data("jqxhr", $.post( route, { id:itemId })
+                .fail( function( data ){
+                    ele.html("<i class=\"fa fa-close\"></i");
+                    ele.removeData();
+                }).done( function ( data ){
+                    ele.parents(selector).remove();
+            }));
             return false;
-        ele.html("<i class=\"fa fa-spin fa-spinner\"></i");
-        ele.data("jqxhr", $.post( "workouts/remove", { id:workoutId })
-            .fail( function( data ){
-                ele.html("<i class=\"fa fa-close\"></i");
-                ele.removeData();
-            }).done( function ( data ){
-                ele.parents(".workout").remove();
-        }));
-        return false;
-    });
+        }
+    }
+
+    // Remove workout session ajax.
+    $(".erase-workout").click(EraseDelegate('workout-id', "workouts/remove", ".workout"));
+    $(".erase-exercise").click(EraseDelegate('exercise-id', "exercises/remove", ".exercise"));
 
     var logItemTemplate = Handlebars.compile($("#entry-template").html());
-
     var addLogItem = function( exerciseId, exerciseName ){
         $('#logged_exercises').append(logItemTemplate({itemId:$('#logged_exercises li').length, exerciseId:exerciseId, exerciseName:exerciseName}));
     };
