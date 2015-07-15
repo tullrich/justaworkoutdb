@@ -43,7 +43,8 @@ def edit_workout( id ):
             for form_log_item in form.logged_exercises.entries:
                 logged_item = LoggedExercise(form_log_item.exercise.data.id
                                              , form_log_item.sets.data
-                                             , form_log_item.reps.data)
+                                             , form_log_item.reps.data
+                                             , form_log_item.weight.data)
                 workout.logged_exercises.append(logged_item)
 
             db.session.add(workout)
@@ -70,7 +71,8 @@ def add_workout():
             for form_log_item in form.logged_exercises.entries:
                 logged_item = LoggedExercise(form_log_item.exercise.data.id
                                              , form_log_item.sets.data
-                                             , form_log_item.reps.data)
+                                             , form_log_item.reps.data
+                                             , form_log_item.weight.data)
                 workout.logged_exercises.append(logged_item)
 
             db.session.add(workout)

@@ -38,6 +38,7 @@ class LoggedExerciseForm(Form):
                             , get_label=lambda a: a.name)
     sets = IntegerField('Sets', validators=[DataRequired(), NumberRange(min=1, max=1024)], default=1)
     reps = IntegerField('Reps', validators=[DataRequired(), NumberRange(min=1, max=1024)], default=1)
+    weight = IntegerField('Weight', validators=[DataRequired(), NumberRange(min=0, max=2000)], default=1)
 
     def __init__(self, *args, **kwargs):
         kwargs['csrf_enabled'] = False

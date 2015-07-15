@@ -20,11 +20,13 @@ class LoggedExercise(db.Model):
     exercise = db.relationship("Exercise", uselist=False)
     sets = db.Column(db.Integer)
     reps = db.Column(db.Integer)
+    weight = db.Column(db.Integer)
 
-    def __init__(self, exercise_id, sets, reps):
+    def __init__(self, exercise_id, sets, reps, weight):
         self.exercise_id = exercise_id
         self.sets = sets
         self.reps = reps
+        self.weight = weight
 
 class WorkoutSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
