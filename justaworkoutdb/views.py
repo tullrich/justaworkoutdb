@@ -16,7 +16,7 @@ def workouts():
     workouts = WorkoutSession.query.filter_by(owner_id=g.user.id).order_by(WorkoutSession.datetime.desc())
     return render_template('workouts.html', workouts=workouts)
 
-@app.route('/workouts/<id>/edit', methods=['GET', 'POST'])
+@app.route('/workouts/<int:id>/edit', methods=['GET', 'POST'])
 @requires_login
 def edit_workout( id ):
     workout_session = WorkoutSession.query.filter_by(id=id).first()
@@ -105,6 +105,29 @@ def exercises():
     exercises = Exercise.query.all()
     return render_template('exercises.html', exercises=exercises)
 
+def render_trends_with_selection( exercise ):
+    if exercise == None:
+        render_template('trends.html');
+
+    exercises = Exercise.query.all()
+    data_points = LoggedExercise.query.join(WorkoutSession)\
+        .filter(WorkoutSession.owner_id==g.user.id)\
+        .filter(LoggedExercise.exercise_id==exercise.id)\
+        .order_by(WorkoutSession.datetime).all();
+    return render_template('trends.html', exercises=exercises, selected_exercise=exercise, data_points=data_points)
+
+
+@app.route('/trends')
+@requires_login
+def trends():
+    exercise = Exercise.query.first()
+    return render_trends_with_selection(exercise)
+
+@app.route('/trends/<int:id>')
+@requires_login
+def trends_exercise( id ):
+    exercise = Exercise.query.filter_by(id=id).first()
+    return render_trends_with_selection(exercise)
 
 @app.route('/exercises/add', methods=['GET', 'POST'])
 @requires_login
@@ -145,7 +168,7 @@ def remove_exercise():
     return response
 
 
-@app.route('/exercises/<id>/edit', methods=['GET', 'POST'])
+@app.route('/exercises/<int:id>/edit', methods=['GET', 'POST'])
 @requires_login
 def edit_exercise( id ):
     exercise = Exercise.query.filter_by(id=id).first()

@@ -1,0 +1,93 @@
+{% import 'widgets.html' as widgets %}
+
+{% extends "layout.html" %}
+{% set active_page = 'trends' -%}
+
+{% block pagecontent %}
+
+ <div class="row">
+    <div class="col-md-12 page-title">
+        <h1>View fitness trends</h1>
+        <hr>
+    </div>
+ </div>
+
+{{ widgets.flashes() }}
+
+ <div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+        {% for exercise in exercises %}
+            <a href="{{ url_for('trends_exercise', id=exercise.id) }}" class="list-group-item {% if exercise.id == selected_exercise.id %} active{% endif %}">{{ exercise.name }}</a>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="myChart" style="width:100%; height:400px;"></div>
+    </div>
+ </div>
+
+<script>
+    var myChart_data = [
+        {% for point in data_points %}
+            [(new Date('{{ point.session.datetime }}')).valueOf(), {{ point.weight }} ],
+        {% endfor %}];
+
+    $(function() {
+        Highcharts.setOptions({
+            global: {
+                useUTC : false
+            }
+        });
+
+        $('#myChart').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: '{{ selected_exercise.name }}'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: {
+                title: {
+                    text: 'Weight (lbs)'
+                }
+            },
+            legend: {
+              enabled: false
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    }
+                },
+            },
+
+            series: [{
+                name: '{{ selected_exercise.name }}',
+                color: 'rgba(223, 83, 83, .5)',
+                data: myChart_data,
+                type: 'spline'
+            }]
+        });
+    });
+</script>
+
+{% endblock %}

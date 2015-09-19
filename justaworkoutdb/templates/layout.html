@@ -2,6 +2,7 @@
 
 {% set navigation_bar = [
     (url_for('workouts'), 'workouts', 'Workouts'),
+    (url_for('trends'), 'trends', 'Trends'),
     (url_for('exercises'), 'exercises', 'Exercises'),
 ] -%}
 {% set active_page = active_page|default('home') -%}
@@ -27,8 +28,8 @@
                     {% endfor %}
                         <li class="usr-info pull-right">
                             <img height="24" width="24" src="{{ g.user.twitter_profile_img }}"/>
-                            <span class="usr-name">@{{ g.user.twitter_name }}, </span>
-                            <a class="subtle" href="{{ url_for('logout') }}"><span class="logout-txt">Logout?</span></a>
+                            <span class="usr-name">@{{ g.user.twitter_name }} </span>
+                            <a class="subtle" href="{{ url_for('logout') }}"><span class="logout-txt">Logout</span></a>
                         </li>
                     </ul>
                  </div>

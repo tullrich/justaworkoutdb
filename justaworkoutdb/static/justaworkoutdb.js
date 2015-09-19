@@ -28,25 +28,27 @@ $(function() {
     $(".erase-workout").click(EraseDelegate('workout-id', "workouts/remove", ".workout"));
     $(".erase-exercise").click(EraseDelegate('exercise-id', "exercises/remove", ".exercise"));
 
-    var logItemTemplate = Handlebars.compile($("#entry-template").html());
-    var addLogItem = function( exerciseId, exerciseName ){
-        $('#logged_exercises').append(logItemTemplate({itemId:$('#logged_exercises li').length, exerciseId:exerciseId, exerciseName:exerciseName}));
+    if($("#entry-template").size() > 0) {
+        var logItemTemplate = Handlebars.compile($("#entry-template").html());
+        var addLogItem = function( exerciseId, exerciseName ){
+            $('#logged_exercises').append(logItemTemplate({itemId:$('#logged_exercises li').length, exerciseId:exerciseId, exerciseName:exerciseName}));
+        };
+
+        // Add log item to dynamic form.
+        $("#add-log-item").change(function( e ){
+            var newVal = $(this).val();
+            if(newVal == null )
+                return;
+
+            addLogItem(newVal, $('#add-log-item option:selected').text());
+            $(this).val(-1);
+            return false;
+        });
+
+        // Remove log item from dynamic form.
+        $("form.add-exercise").on("click", ".erase-logged_item", function( e ){
+            $(this).parents("li").remove();
+            return false;
+        });
     };
-
-    // Add log item to dynamic form.
-    $("#add-log-item").change(function( e ){
-        var newVal = $(this).val();
-        if(newVal == null )
-            return;
-
-        addLogItem(newVal, $('#add-log-item option:selected').text());
-        $(this).val(-1);
-        return false;
-    });
-
-    // Remove log item from dynamic form.
-    $("form.add-exercise").on("click", ".erase-logged_item", function( e ){
-        $(this).parents("li").remove();
-        return false;
-    });
 });

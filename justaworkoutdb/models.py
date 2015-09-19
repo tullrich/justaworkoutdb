@@ -28,6 +28,7 @@ class LoggedExercise(db.Model):
         self.reps = reps
         self.weight = weight
 
+
 class WorkoutSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
