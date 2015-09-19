@@ -1,0 +1,18 @@
+# This is a simple readme of dependencies to eventually make a deployment tool from
+
+Apt
+	git
+	justaworkoutdb		# git clone
+	nginx
+	uwsgi
+	gcc   				# required to build wsgi
+
+
+Pip
+	Fask
+	Flask-WTF
+	Flask-SQLAlchemy
+	Flask-OAuth
+
+$ env1/bin/pip freeze > requirements.txt
+$ env2/bin/pip install -r requirements.txt
