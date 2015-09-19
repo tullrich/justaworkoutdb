@@ -28,6 +28,7 @@ class HiddenQuerySelectField(QuerySelectField):
 class AddExerciseForm(Form):
     name = StringField('Exercise Name', validators=[DataRequired(), Length(max=50)])
     description = TextAreaField('Exercise Description', validators=[Optional(), Length(max=512)])
+    color = StringField('Exercise Color', validators=[DataRequired(), Length(max=20)])
 
 class LoggedExerciseForm(Form):
 

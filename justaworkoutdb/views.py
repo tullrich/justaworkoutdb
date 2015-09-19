@@ -3,6 +3,7 @@ from utility import requires_login, init_db, connect_db, get_db
 from justaworkoutdb import app, twitter, db
 from .forms import AddExerciseForm, AddWorkoutSessionForm
 from .models import Exercise, WorkoutSession, User, LoggedExercise
+from colour import Color
 
 @app.route('/')
 @requires_login
@@ -137,7 +138,7 @@ def add_exercise():
     if request.method == 'POST':
         if form.validate_on_submit():
 
-            exercise = Exercise(form.name.data, form.description.data)
+            exercise = Exercise(form.name.data, form.description.data, Color(form.color.data))
             db.session.add(exercise)
             db.session.commit()
 
@@ -188,6 +189,7 @@ def edit_exercise( id ):
             # Modify the existing exercise
             exercise.name = form.name.data
             exercise.description = form.description.data
+            exercise.color = Color(form.color.data).hex
             db.session.commit()
 
             flash('Exercise modified!', category='success')

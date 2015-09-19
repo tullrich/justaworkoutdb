@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "highcharts": "highcharts-release#~4.1.8"
+    "highcharts": "highcharts-release#~4.1.8",
+    "spectrum": "~1.7.1"
   }
 }

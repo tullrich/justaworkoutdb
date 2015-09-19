@@ -1,4 +1,5 @@
 alembic==0.8.2
+colour==0.1.2
 Flask==0.10.1
 Flask-OAuth==0.12
 Flask-SQLAlchemy==2.0

@@ -1,6 +1,7 @@
 from flask import Flask, session, g
 from flask.ext.oauth import OAuth
 from flask.ext.sqlalchemy import SQLAlchemy
+from colour import Color
 
 app = Flask(__name__)
 

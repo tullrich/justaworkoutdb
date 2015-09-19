@@ -31,7 +31,7 @@
             </div>
             <div class="panel-body">
             {% for logged_exercise in workout.logged_exercises %}
-                <span class="label label-default">{{ logged_exercise.exercise.name }}</span>
+                <div class="label label-default" style="background-color:{{ logged_exercise.exercise.get_color().hex }};">{{ logged_exercise.exercise.name }}</div>
             {% endfor %}
             </div>
         </li>

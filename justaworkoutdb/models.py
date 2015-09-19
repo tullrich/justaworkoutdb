@@ -1,17 +1,21 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from . import db, twitter
 from datetime import datetime
+from colour import Color
 
 class Exercise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
     description = db.Column(db.String(512))
+    color = db.Column(db.String(20))
 
-
-    def __init__(self, name, description):
+    def __init__(self, name, description, color):
         self.name = name
         self.description = description
+        self.color = color.hex
 
+    def get_color(self):
+        return Color(self.color)
 
 class LoggedExercise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
