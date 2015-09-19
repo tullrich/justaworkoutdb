@@ -1,8 +1,7 @@
 // Global Variables
-@bg-color-start:        #ffffff;
-@bg-color-end:          #ffffff;
-@bg-color:              @bg-color-start;
-@bg-color-light:        #434343;
+@bg-color-outer:        #fafafa;
+@bg-color-inner:        #ffffff;
+@bg-color:              @bg-color-inner;
 @primary-color:         #9797B5;
 @highlight-color:       white;
 @edge-color:            #eeeeee;
@@ -206,13 +205,14 @@ hr {
 #loginPage {
   padding-top: 80px;
   padding-bottom: 40px;
+  color: @login-border-color;
 
   .signin {
-    background-color: #5a5a5a;
     width: 330px;
     padding: 15px;
     margin: 0 auto;
     border: 1px solid @login-border-color;
+    background-color: @bg-color-inner;
   }
 
   ul {
@@ -229,7 +229,7 @@ hr {
     background-color: @bg-color;
     display: block;
     width: 100%;
-    color: @primary-color;
+    color: @bg-color-inner;
     line-height: 40px;
     border: 1px solid @login-border-color;
     border-radius: 2px;
@@ -250,14 +250,6 @@ hr {
 
   .twitter-btn {
     .login-btn(#4099FF)
-  }
-
-  .google-btn {
-    .login-btn(#D34836)
-  }
-
-  .facebook-btn {
-    .login-btn(#3B5998)
   }
 }
 
