@@ -30,7 +30,7 @@
                     <a class="edit-exercise" href="{{ url_for('edit_exercise', id=exercise.id) }}"><i class="fa fa-edit"></i></a>
                     <a class="erase-exercise" href="javascript:void(0);" data-exercise-id="{{ exercise.id }}"><i class="fa fa-close"></i></a>
                 </div>
-                <span class="exercise-name"><i class="fa fa-area-chart"></i> <a>{{ exercise.name }}</a></span>
+                <span class="exercise-name"><i class="fa fa-area-chart" style="color:{{ exercise.get_color().hex }};"></i>&nbsp<a>{{ exercise.name }}</a></span>
                 <span class="exercise-description">{{ exercise.description }}</span>
             </div>
             <div class="clearfix"></div>
