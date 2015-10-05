@@ -2,8 +2,7 @@ $(function() {
     // Datepicker
     $("input[type='text'].input-datepicker").pickadate({
         formatSubmit: 'yyyy-mm-dd',
-        hiddenName: true,
-        editable: true
+        hiddenName: true
     });
 
     function EraseDelegate(key, route, selector) {
