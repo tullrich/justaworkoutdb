@@ -8,7 +8,7 @@ class Exercise(db.Model):
     name = db.Column(db.String(50), unique=True)
     description = db.Column(db.String(512))
     color = db.Column(db.String(20))
-    trend_enabled = db.Column(db.Boolean());
+    trend_enabled = db.Column(db.Boolean())
     #type =  db.Column(db.Enum('lift', 'cardio', 'endurance', name='employee_types'))
 
     def __init__(self, name, description, color):

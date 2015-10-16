@@ -4,10 +4,6 @@ env.hosts = ['wwwhost@fitness.tullrich.com']
 code_dir = '/home/wwwhost/justaworkoutdb'
 
 
-def push():
-    local("git push origin master")
-
-
 def start():
 	with cd(code_dir):
 		run("uwsgi uwsgi.ini")

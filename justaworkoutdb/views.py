@@ -108,20 +108,20 @@ def exercises():
 
 def render_trends_with_selection( exercise ):
     if exercise == None:
-        render_template('trends.html');
+        return redirect(url_for('exercises'))
 
     exercises = Exercise.query.all()
     data_points = LoggedExercise.query.join(WorkoutSession)\
         .filter(WorkoutSession.owner_id==g.user.id)\
         .filter(LoggedExercise.exercise_id==exercise.id)\
-        .order_by(WorkoutSession.datetime).all();
+        .order_by(WorkoutSession.datetime).all()
     return render_template('trends.html', exercises=exercises, selected_exercise=exercise, data_points=data_points)
 
 
 @app.route('/trends')
 @requires_login
 def trends():
-    exercise = Exercise.query.first()
+    exercise = Exercise.query.filter_by(trend_enabled=True).first()
     return render_trends_with_selection(exercise)
 
 @app.route('/trends/<int:id>')
