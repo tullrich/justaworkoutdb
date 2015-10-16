@@ -8,6 +8,8 @@ class Exercise(db.Model):
     name = db.Column(db.String(50), unique=True)
     description = db.Column(db.String(512))
     color = db.Column(db.String(20))
+    trend_enabled = db.Column(db.Boolean());
+    #type =  db.Column(db.Enum('lift', 'cardio', 'endurance', name='employee_types'))
 
     def __init__(self, name, description, color):
         self.name = name
@@ -25,6 +27,8 @@ class LoggedExercise(db.Model):
     sets = db.Column(db.Integer)
     reps = db.Column(db.Integer)
     weight = db.Column(db.Integer)
+    #duration =
+    #distance =
 
     def __init__(self, exercise_id, sets, reps, weight):
         self.exercise_id = exercise_id

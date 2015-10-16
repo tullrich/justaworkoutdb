@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, TextAreaField, DateField, FormField, IntegerField, FieldList
-from wtforms.validators import DataRequired, Length, NumberRange, Optional
+from wtforms import StringField, TextAreaField, DateField, FormField, IntegerField, FieldList, BooleanField
+from wtforms.validators import DataRequired, Length, NumberRange, Optional, Required
 from wtforms.widgets import html_params, HTMLString, ListWidget, HiddenInput
 from flask import get_template_attribute
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -29,6 +29,7 @@ class AddExerciseForm(Form):
     name = StringField('Exercise Name', validators=[DataRequired(), Length(max=50)])
     description = TextAreaField('Exercise Description', validators=[Optional(), Length(max=512)])
     color = StringField('Exercise Color', validators=[DataRequired(), Length(max=20)])
+    trend_enabled = BooleanField('Enabled Trend', validators=[], default=True)
 
 class LoggedExerciseForm(Form):
 

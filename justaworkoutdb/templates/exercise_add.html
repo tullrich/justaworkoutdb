@@ -27,8 +27,13 @@
         {{ form.description.label }}:
         {{ form.description(class="form-control", rows="3") }}
     </div>
+    <div class="checkbox">
+        <label>
+            {{ form.trend_enabled }} Enabled Trend Graph
+         </label>
+    </div>
     <div class="form-group">
-        <input type='text' id="color" name="color" />
+        <input type='text' id="color" name="color" value="{{ form.color.data }}" />
         <script>
             $("#color").spectrum({
                 preferredFormat: "hex",

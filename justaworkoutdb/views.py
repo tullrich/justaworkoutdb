@@ -190,6 +190,7 @@ def edit_exercise( id ):
             exercise.name = form.name.data
             exercise.description = form.description.data
             exercise.color = Color(form.color.data).hex
+            exercise.trend_enabled = form.trend_enabled.data
             db.session.commit()
 
             flash('Exercise modified!', category='success')

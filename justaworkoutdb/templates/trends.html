@@ -18,7 +18,9 @@
     <div class="col-md-3">
         <div class="list-group">
         {% for exercise in exercises %}
+            {% if exercise.trend_enabled %}
             <a href="{{ url_for('trends_exercise', id=exercise.id) }}" class="list-group-item {% if exercise.id == selected_exercise.id %} active{% endif %}">{{ exercise.name }}</a>
+            {% endif %}
         {% endfor %}
         </div>
     </div>
