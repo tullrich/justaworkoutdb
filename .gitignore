@@ -62,3 +62,4 @@ config.cfg
 justaworkoutdb/static/bower_components
 node_modules/
 justaworkoutenv/
+justaworkoutdbenv2/
